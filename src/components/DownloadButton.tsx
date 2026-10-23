@@ -2,21 +2,24 @@
 import { useState } from "react";
 export function DownloadButton({id,kind,kinds,label}:{id:string;kind?:"avatar"|"banner"|"image";kinds?:string[];label:string}) {
   const [sent, setSent] = useState(false);
+  async function sleep(ms: number) { return new Promise((r) => setTimeout(r, ms)); }
   async function download() {
     try {
       const targets = kinds && kinds.length ? kinds : kind ? [kind] : [];
-      for (const t of targets) {
+      for (let i = 0; i < targets.length; i++) {
+        const t = targets[i];
         const r = await fetch(`/api/content/${id}/download-file?kind=${t}`);
         if (!r.ok) throw new Error("تعذر التحميل");
         const blob = await r.blob();
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = "";
+        a.download = `${t}.jpg`;
         document.body.appendChild(a);
         a.click();
         a.remove();
         URL.revokeObjectURL(url);
+        if (i < targets.length - 1) await sleep(800);
       }
       setSent(true);
     } catch (e) {
