@@ -40,13 +40,13 @@ export function ContentCard({item}:{item:Item}) {
             <>
               <div aria-hidden style={{position:"absolute",inset:0,overflow:"hidden"}}>
                 {banner ? <img src={banner} alt="" style={blurLayer}/> : null}
-                {avatar ? <img src={avatar} alt="" style={{...blurLayer,WebkitMaskImage:"radial-gradient(circle at 50% 80%, #000 0%, transparent 70%)",maskImage:"radial-gradient(circle at 50% 80%, #000 0%, transparent 70%)"}}/> : null}
+                {avatar ? <img src={avatar} alt="" style={{...blurLayer,WebkitMaskImage:"radial-gradient(circle at 50% 75%, #000 0%, transparent 70%)",maskImage:"radial-gradient(circle at 50% 75%, #000 0%, transparent 70%)"}}/> : null}
                 <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.12)"}}/>
               </div>
-              <div style={{position:"relative",aspectRatio:"16/9",width:"100%",overflow:"hidden",borderRadius:18,border:"2px solid #111",background:"linear-gradient(135deg,var(--purple),var(--purple2))"}}>
+              <div style={{position:"absolute",top:16,left:16,right:16,height:150,borderRadius:22,border:"2.5px solid #111",overflow:"hidden",background:"linear-gradient(135deg,var(--purple),var(--purple2))"}}>
                 {banner ? <img src={banner} alt={item.name} style={{width:"100%",height:"100%",objectFit:"cover",display:"block"}}/> : <span style={{display:"flex",alignItems:"center",justifyContent:"center",height:"100%",fontSize:60,color:"rgba(255,255,255,0.28)"}}>✦</span>}
               </div>
-              {avatar ? <img src={avatar} alt={item.name} style={{position:"absolute",bottom:-45,left:"50%",transform:"translateX(-50%)",width:90,height:90,objectFit:"cover",borderRadius:"50%",border:"3px solid #111",background:"#fff",boxShadow:"0 12px 30px #0005"}}/> : null}
+              {avatar ? <img src={avatar} alt={item.name} style={{position:"absolute",top:106,left:"50%",transform:"translateX(-50%)",width:120,height:120,objectFit:"cover",borderRadius:"50%",border:"3px solid #111",background:"#fff",boxShadow:"0 14px 32px #0005"}}/> : null}
               <button className="like-btn" disabled={!loaded} onClick={toggleLike} style={{position:"absolute",top:12,right:12,width:40,height:40,borderRadius:"50%",border:"none",background:myLiked?"#c084fc":"rgba(255,255,255,.15)",color:"#fff",fontWeight:900,fontSize:20,cursor:"pointer",boxShadow:"0 6px 16px #0005",transition:"transform .2s",transform:myLiked?"scale(1.08)":"scale(1)",opacity:loaded?1:.5}}>{myLiked?"❤":"♡"}</button>
             </>
           ) : (
@@ -61,7 +61,7 @@ export function ContentCard({item}:{item:Item}) {
           )}
         </div>
       </Link>
-      <div className="card-body" style={{padding:18,paddingTop:52}}>
+      <div className="card-body" style={{padding:18}}>
         <Link href={href} style={{color:"inherit"}}><h3 style={{margin:0,fontSize:18,fontWeight:800,lineHeight:1.35,overflowWrap:"anywhere"}}>{item.name}</h3></Link>
         <div className="muted" style={{marginTop:7,fontSize:13}}>بواسطة {item.creator.username}</div>
         <div className="meta" style={{marginTop:13,fontSize:13,display:"flex",gap:16,alignItems:"center"}}><span>◉ {item.views} مشاهدة</span><span>↓ {item.downloads} تنزيل</span><span style={{color:myLiked?"#c084fc":"inherit"}}>♡ {myLikes} إعجاب</span></div>
