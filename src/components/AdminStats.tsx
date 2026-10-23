@@ -60,7 +60,7 @@ export default function AdminStats() {
           <thead><tr><th>التاريخ</th><th>عدد التسجيلات</th></tr></thead>
           <tbody>
             {data.registrationsByDay.map((r) => (
-              <tr key={r.createdAt.getTime()}><td>{new Date(r.createdAt).toLocaleDateString("ar")}</td><td>{r._count.id}</td></tr>
+              <tr key={new Date(r.createdAt).getTime()}><td>{new Date(r.createdAt).toLocaleDateString("ar")}</td><td>{r._count.id}</td></tr>
             ))}
           </tbody>
         </table>
