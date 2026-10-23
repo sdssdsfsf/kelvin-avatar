@@ -153,20 +153,7 @@ export function FormatterTool() {
   );
 }
 
-export function SnowflakeTool() {
-  const [v, setV] = useState("");
-  const id = v.trim();
-  const valid = /^\d{17,20}$/.test(id);
-  const ts = valid ? Number((BigInt(id) >> BigInt(22)) + BigInt(1420070400000)) : 0;
-  const date = valid ? new Date(ts) : null;
-  return (
-    <ToolShell controls={<><Field label="Discord Snowflake ID"><input className="tl-in" style={{direction:"ltr"}} value={v} onChange={(e)=>setV(e.target.value)} placeholder="123456789012345678" /></Field></>}>
-      {!valid ? <div className="tl-empty">أدخل snowflake id صحيح</div> :
-      <div className="tl-list"><div className="tl-item"><div><small>تاريخ الإنشاء</small><b>{date!.toLocaleString("ar")}</b><br/><code>{date!.toISOString()}</code></div><CopyBtn text={date!.toISOString()} /></div>
-      <div className="tl-item"><div><small>Unix (s)</small><b>{Math.floor(ts/1000)}</b></div><CopyBtn text={String(Math.floor(ts/1000))} /></div></div>}
-    </ToolShell>
-  );
-}
+/* =============== Timestamp generator =============== */
 const pad = (n: number) => String(n).padStart(2, "0");
 
 function relative(ts: number) {
@@ -231,6 +218,42 @@ export function TimestampTool() {
           })}
         </div>
       )}
+    </ToolShell>
+  );
+}
+
+export function SnowflakeTool() {
+  const [v, setV] = useState("");
+  const id = v.trim();
+  const valid = /^\d{17,20}$/.test(id);
+  const ts = valid ? Number((BigInt(id) >> BigInt(22)) + BigInt(1420070400000)) : 0;
+  const date = valid ? new Date(ts) : null;
+  return (
+    <ToolShell controls={<><Field label="Discord Snowflake ID"><input className="tl-in" style={{direction:"ltr"}} value={v} onChange={(e)=>setV(e.target.value)} placeholder="123456789012345678" /></Field></>}>
+      {!valid ? <div className="tl-empty">أدخل snowflake id صحيح</div> :
+      <div className="tl-list"><div className="tl-item"><div><small>تاريخ الإنشاء</small><b>{date!.toLocaleString("ar")}</b><br/><code>{date!.toISOString()}</code></div><CopyBtn text={date!.toISOString()} /></div>
+      <div className="tl-item"><div><small>Unix (s)</small><b>{Math.floor(ts/1000)}</b></div><CopyBtn text={String(Math.floor(ts/1000))} /></div></div>}
+    </ToolShell>
+  );
+}
+
+export function DiscordInviteTool() {
+  const [code, setCode] = useState("");
+  const out = code ? `https://discord.gg/${code}` : "";
+  return (
+    <ToolShell controls={<><Field label="كود الدعوة"><input className="tl-in" style={{direction:"ltr"}} value={code} onChange={(e)=>setCode(e.target.value)} placeholder="abc123" /></Field><CopyBtn text={out} label="نسخ الرابط" /></>}>
+      <div className="tl-empty"><code style={{fontSize:18}}>{out || "—"}</code></div>
+    </ToolShell>
+  );
+}
+
+export function DiscordMentionTool() {
+  const [id, setId] = useState("");
+  const [type, setType] = useState("user");
+  const out = type === "user" ? `<@${id}>` : type === "role" ? `<@&${id}>` : `<#${id}>`;
+  return (
+    <ToolShell controls={<><Field label="ID"><input className="tl-in" style={{direction:"ltr"}} value={id} onChange={(e)=>setId(e.target.value)} /></Field><Field label="النوع"><select className="tl-in" value={type} onChange={(e)=>setType(e.target.value)}><option value="user">مستخدم</option><option value="role">رتبة</option><option value="channel">قناة</option></select></Field><CopyBtn text={out} label="نسخ" /></>}>
+      <div className="tl-empty"><code style={{fontSize:20}}>{out}</code></div>
     </ToolShell>
   );
 }

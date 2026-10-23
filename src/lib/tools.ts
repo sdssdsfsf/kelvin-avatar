@@ -37,7 +37,8 @@ export const tools: ToolMeta[] = [
   { slug: "image-compressor", title: "ضغط الصور", desc: "قلّل حجم صورك بدون فقدان الجودة 분명ًا.", icon: "📦", category: "images" },
   { slug: "text-to-ascii", title: "تحويل نص إلى ASCII", desc: "حوّل نصوصك إلى فن ASCII أنيق للبروفايلات.", icon: "🔠", category: "text" },
   { slug: "discord-status", title: "مولّد حالات ديسكورد", desc: "أنشئ حالات مخصصة وأنيقة لديسكورد مع أيقونات.", icon: "💬", category: "text" },
-  { slug: "snowflake", title: "فك شفرة Snowflake", desc: "حوّل معرّف ديسكورد (Snowflake) إلى تاريخ الإنشاء.", icon: "❄️", category: "text" },
+  { slug: "discord-invite", title: "صانع روابط الدعوة", desc: "حوّل كود الدعوة إلى رابط ديسكورد كامل.", icon: "🔗", category: "text" },
+  { slug: "discord-mention", title: "منشئ المنشن", desc: "أنشئ أكواد منشن ديسكورد للمستخدمين والرتب والقنوات.", icon: "📣", category: "text" },
 ];
 
 export const getTool = (slug: string) => tools.find((t) => t.slug === slug);

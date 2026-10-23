@@ -22,8 +22,19 @@ export default async function Leaderboard() {
                 <div className="thumb" style={{position:"relative",overflow:"hidden",borderRadius:22,height:240,background:"linear-gradient(135deg,#6d28d9,#8b5cf6,#b794f6)",boxShadow:"0 14px 38px #39205a16"}}>
                   {c.type === "PROFILE" ? (
                     <>
-                      <div style={{width:"100%",height:"100%",overflow:"hidden"}}>{banner ? <img src={banner} alt={c.name} style={{width:"100%",height:"100%",objectFit:"cover",display:"block"}}/> : <span style={{fontSize:56,color:"rgba(255,255,255,0.3)"}}>✦</span>}</div>
-                      {avatar ? <img src={avatar} alt={c.name} style={{width:120,height:120,objectFit:"cover",borderRadius:"50%",border:"7px solid white",position:"absolute",bottom:-22,left:22,boxShadow:"0 16px 35px #0003"}}/> : null}
+<div style={{position:"relative",borderRadius:22,overflow:"hidden",background:"linear-gradient(135deg,#6d28d9,#8b5cf6,#b794f6)",padding:"16px 16px 80px"}}>
+  <div aria-hidden style={{position:"absolute",inset:0,overflow:"hidden"}}>
+    {banner ? <img src={banner} alt="" style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",filter:"blur(20px) saturate(1.2)",transform:"scale(1.4)"}}/> : null}
+    {avatar ? <img src={avatar} alt="" style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",WebkitMaskImage:"radial-gradient(circle at 50% 80%, #000 0%, transparent 70%)",maskImage:"radial-gradient(circle at 50% 80%, #000 0%, transparent 70%)"}}/> : null}
+    <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.12)"}}/>
+  </div>
+  <div style={{position:"relative"}}>
+    <div style={{aspectRatio:"16/9",width:"100%",overflow:"hidden",borderRadius:18,border:"2px solid #111",background:"linear-gradient(135deg,#6d28d9,#8b5cf6)"}}>
+      {banner ? <img src={banner} alt={c.name} style={{width:"100%",height:"100%",objectFit:"cover",display:"block"}}/> : <span style={{fontSize:56,color:"rgba(255,255,255,0.3)"}}>✦</span>}
+    </div>
+    {avatar ? <img src={avatar} alt={c.name} style={{width:90,height:90,objectFit:"cover",borderRadius:"50%",border:"3px solid #111",background:"#fff",position:"absolute",bottom:-45,left:"50%",transform:"translateX(-50%)",boxShadow:"0 12px 30px #0005"}}/> : null}
+  </div>
+</div>
                     </>
                   ) : <>{banner ? <img loading="lazy" src={banner} alt={c.name} style={{width:"100%",height:"100%",objectFit:"cover",display:"block"}}/> : <span style={{fontSize:56,color:"rgba(255,255,255,0.3)"}}>✦</span>}</>}
                 </div>
