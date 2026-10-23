@@ -39,6 +39,19 @@ export const tools: ToolMeta[] = [
   { slug: "discord-status", title: "مولّد حالات ديسكورد", desc: "أنشئ حالات مخصصة وأنيقة لديسكورد مع أيقونات.", icon: "💬", category: "text" },
   { slug: "discord-invite", title: "صانع روابط الدعوة", desc: "حوّل كود الدعوة إلى رابط ديسكورد كامل.", icon: "🔗", category: "text" },
   { slug: "discord-mention", title: "منشئ المنشن", desc: "أنشئ أكواد منشن ديسكورد للمستخدمين والرتب والقنوات.", icon: "📣", category: "text" },
+  { slug: "photo-enhancer", title: "صانع تحسين الصور", desc: "حسّن جودة الصور، أضف إطارات و limites، وغيّر السطوع والتشبع لتحسين المظهر.", icon: "✨", category: "images" },
+  { slug: "image-rotate", title: "تدوير الصور", desc: "دوّر أي صورة بأي زاوية.", icon: "🔄", category: "images" },
+  { slug: "image-flip", title: "عكس الصور", desc: "عكس الصورة أفقياً أو رأسياً.", icon: "🔁", category: "images" },
+  { slug: "image-grayscale", title: "تدرج رمادي", desc: "حوّل الصورة إلى الأبيض والأسود.", icon: "⚪", category: "images" },
+  { slug: "image-sepia", title: "سيبيا", desc: "أضف لمسة سيبيا قديمة للصورة.", icon: "🟤", category: "images" },
+  { slug: "image-invert", title: "عكس الألوان", desc: "عكس ألوان الصورة إلى سلبي.", icon: "📸", category: "images" },
+  { slug: "image-blur", title: "طمس الصور", desc: "أضف تأثير طمس (Blur) مع التحكم بالقوة.", icon: "🌫️", category: "images" },
+  { slug: "image-pixelate", title: "تبيكسل الصور", desc: "حوّل الصورة إلى بكسلات كبيرة.", icon: "🧊", category: "images" },
+  { slug: "image-circle-crop", title: "قص دائري", desc: "اقتطع الجزء الدائري من الصورة.", icon: "⭕", category: "images" },
+  { slug: "image-watermark", title: "علامة مائية", desc: "أضف نصاً كعلامة مائية في وسط الصورة.", icon: "🏷️", category: "images" },
+  { slug: "image-border", title: "إطار ملون", desc: "أضف إطاراً ملوناً حول الصورة.", icon: "🖼️", category: "images" },
+  { slug: "image-shadow", title: "إضافة ظل", desc: "أضف ظلاً ناعماً للصورة.", icon: "🌫️", category: "images" },
+  { slug: "image-vignette", title: "تغميق الأطراف", desc: "أضف تظليلاً على أطراف الصورة.", icon: "🌑", category: "images" },
 ];
 
 export const getTool = (slug: string) => tools.find((t) => t.slug === slug);

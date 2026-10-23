@@ -7,7 +7,7 @@ import { AvatarCrop, BannerCrop, BgRemover, EmojiColor, EmojiMaker, ImageConvert
 import { ColorConverter, GradientTool, PaletteTool } from "@/components/tools/ColorTools";
 import { FancyText, FormatterTool, TimestampTool, SnowflakeTool, DiscordMentionTool, DiscordInviteTool } from "@/components/tools/TextTools";
 import { TextCaseTool, PasswordGeneratorTool, BoxShadowTool, BorderRadiusTool, CssButtonTool } from "@/components/tools/ColorTools";
-import { ImageResizerTool, ColorPickerTool, ImageCompressorTool, TextToAsciiTool, DiscordStatusTool, PhotoEnhancerTool } from "@/components/tools/ImageTools";
+import { ImageResizerTool, ColorPickerTool, ImageCompressorTool, TextToAsciiTool, DiscordStatusTool, PhotoEnhancerTool, RotateTool, FlipTool, GrayscaleTool, SepiaTool, InvertTool, BlurTool, PixelateTool, CircleCropTool, WatermarkTool, BorderTool, ShadowTool, VignetteTool } from "@/components/tools/ImageTools";
 
 const registry: Record<string, ComponentType> = {
   "emoji-color": EmojiColor,
@@ -37,6 +37,18 @@ const registry: Record<string, ComponentType> = {
   "text-to-ascii": TextToAsciiTool,
   "discord-status": DiscordStatusTool,
   "photo-enhancer": PhotoEnhancerTool,
+  "image-rotate": RotateTool,
+  "image-flip": FlipTool,
+  "image-grayscale": GrayscaleTool,
+  "image-sepia": SepiaTool,
+  "image-invert": InvertTool,
+  "image-blur": BlurTool,
+  "image-pixelate": PixelateTool,
+  "image-circle-crop": CircleCropTool,
+  "image-watermark": WatermarkTool,
+  "image-border": BorderTool,
+  "image-shadow": ShadowTool,
+  "image-vignette": VignetteTool,
 };
 
 export function generateStaticParams() {

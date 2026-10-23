@@ -422,3 +422,154 @@ export function PhotoEnhancerTool() {
     </ToolShell>
   );
 }
+
+function applyFilter(img: HTMLImageElement, ref: HTMLCanvasElement, filter: string) {
+  const c = ref; c.width = img.naturalWidth; c.height = img.naturalHeight;
+  const ctx = c.getContext("2d")!; ctx.filter = filter; ctx.drawImage(img, 0, 0); ctx.filter = "none";
+}
+
+function save(canvas: HTMLCanvasElement, name: string, suffix: string) {
+  canvas.toBlob((b) => { if (b) { const u = URL.createObjectURL(b); const a = document.createElement("a"); a.href = u; a.download = `${name}-${suffix}.png`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(u); }}, "image/png");
+}
+
+/* =============== Image tools batch =============== */
+export function RotateTool() {
+  const { img, name, load } = useImage();
+  const ref = useRef<HTMLCanvasElement>(null);
+  const [deg, setDeg] = useState(0);
+  const rad = (deg * Math.PI) / 180;
+  const sw = img ? Math.abs(img.naturalWidth * Math.cos(rad)) + Math.abs(img.naturalHeight * Math.sin(rad)) : 0;
+  const sh = img ? Math.abs(img.naturalWidth * Math.sin(rad)) + Math.abs(img.naturalHeight * Math.cos(rad)) : 0;
+  return (
+    <ToolShell controls={<><Dropzone onFile={load} /><Field label="درجة الدوران"><Range label={String(deg)} value={deg} min={0} max={360} onChange={setDeg} unit="°" /></Field><button className="tl-btn full" disabled={!img} onClick={() => { if (!ref.current || !img) return; const c = ref.current; c.width = sw; c.height = sh; const ctx = c.getContext("2d")!; ctx.translate(sw / 2, sh / 2); ctx.rotate(rad); ctx.drawImage(img, -img.naturalWidth / 2, -img.naturalHeight / 2); save(c, name, "rotated"); }}>تدور الصورة</button></>}>
+      {!img && <Empty />}
+      {img && <canvas ref={ref} className="tl-checker" style={{ ...hide(!!img), maxWidth: "100%", maxHeight: 500 }} />}
+    </ToolShell>
+  );
+}
+export function FlipTool() {
+  const { img, name, load } = useImage();
+  const ref = useRef<HTMLCanvasElement>(null);
+  const [mode, setMode] = useState<"h" | "v">("h");
+  const flip = (m: "h" | "v") => {
+    if (!ref.current || !img) return;
+    const c = ref.current;
+    c.width = img.naturalWidth;
+    c.height = img.naturalHeight;
+    const ctx = c.getContext("2d")!;
+    if (m === "h") { ctx.translate(img.naturalWidth, 0); ctx.scale(-1, 1); }
+    ctx.drawImage(img, 0, 0);
+    save(c, name, "flipped");
+  };
+  return (
+    <ToolShell controls={<><Dropzone onFile={load} /><div className="tl-flex" style={{gap:8}}><button className="tl-btn sec" onClick={()=>setMode("h")}>أفقي</button><button className="tl-btn sec" onClick={()=>setMode("v")}>رأسي</button></div><button className="tl-btn full" disabled={!img} onClick={()=>flip(mode)}>عكس الصورة</button></>}>
+      {!img && <Empty />}
+      {img && <canvas ref={ref} className="tl-checker" style={{ ...hide(!!img), maxWidth: "100%", maxHeight: 500 }} />}
+    </ToolShell>
+  );
+}
+export function GrayscaleTool() {
+  const { img, name, load } = useImage();
+  const ref = useRef<HTMLCanvasElement>(null);
+  return (
+    <ToolShell controls={<><Dropzone onFile={load} /><button className="tl-btn full" disabled={!img} onClick={() => { if (!ref.current || !img) return; applyFilter(img, ref.current, "grayscale(100%)"); save(ref.current, name, "grayscale"); }}>تدرج رمادي</button></>}>
+      {!img && <Empty />}
+      {img && <canvas ref={ref} className="tl-checker" style={{ ...hide(!!img), maxWidth: "100%", maxHeight: 500 }} />}
+    </ToolShell>
+  );
+}
+export function SepiaTool() {
+  const { img, name, load } = useImage();
+  const ref = useRef<HTMLCanvasElement>(null);
+  return (
+    <ToolShell controls={<><Dropzone onFile={load} /><button className="tl-btn full" disabled={!img} onClick={() => { if (!ref.current || !img) return; applyFilter(img, ref.current, "sepia(100%)"); save(ref.current, name, "sepia"); }}>سيبيا</button></>}>
+      {!img && <Empty />}
+      {img && <canvas ref={ref} className="tl-checker" style={{ ...hide(!!img), maxWidth: "100%", maxHeight: 500 }} />}
+    </ToolShell>
+  );
+}
+export function InvertTool() {
+  const { img, name, load } = useImage();
+  const ref = useRef<HTMLCanvasElement>(null);
+  return (
+    <ToolShell controls={<><Dropzone onFile={load} /><button className="tl-btn full" disabled={!img} onClick={() => { if (!ref.current || !img) return; applyFilter(img, ref.current, "invert(100%)"); save(ref.current, name, "invert"); }}>عكس الألوان</button></>}>
+      {!img && <Empty />}
+      {img && <canvas ref={ref} className="tl-checker" style={{ ...hide(!!img), maxWidth: "100%", maxHeight: 500 }} />}
+    </ToolShell>
+  );
+}
+export function BlurTool() {
+  const { img, name, load } = useImage();
+  const ref = useRef<HTMLCanvasElement>(null);
+  const [blur, setBlur] = useState(5);
+  return (
+    <ToolShell controls={<><Dropzone onFile={load} /><Field label="درجة الطمس"><Range label={String(blur)} value={blur} min={0} max={50} onChange={setBlur} unit="px" /></Field><button className="tl-btn full" disabled={!img} onClick={() => { if (!ref.current || !img) return; applyFilter(img, ref.current, `blur(${blur}px)`); save(ref.current, name, "blur"); }}>تطبيق الطمس</button></>}>
+      {!img && <Empty />}
+      {img && <canvas ref={ref} className="tl-checker" style={{ ...hide(!!img), maxWidth: "100%", maxHeight: 500 }} />}
+    </ToolShell>
+  );
+}
+export function PixelateTool() {
+  const { img, name, load } = useImage();
+  const ref = useRef<HTMLCanvasElement>(null);
+  const [px, setPx] = useState(10);
+  return (
+    <ToolShell controls={<><Dropzone onFile={load} /><Field label="حجم البكسل"><Range label={String(px)} value={px} min={4} max={64} onChange={setPx} unit="px" /></Field><button className="tl-btn full" disabled={!img} onClick={() => { if (!ref.current || !img) return; const c = ref.current; c.width = img.naturalWidth; c.height = img.naturalHeight; const ctx = c.getContext("2d")!; const w = img.naturalWidth, h = img.naturalHeight; ctx.drawImage(img, 0, 0); const id = ctx.getImageData(0, 0, w, h); for (let y = 0; y < h; y += px) for (let x = 0; x < w; x += px) { const i = (y * w + x) * 4; for (let dy = 0; dy < px && y + dy < h; dy++) for (let dx = 0; dx < px && x + dx < w; dx++) { const j = ((y + dy) * w + (x + dx)) * 4; id.data[j] = id.data[i]; id.data[j + 1] = id.data[i + 1]; id.data[j + 2] = id.data[i + 2]; id.data[j + 3] = id.data[i + 3]; }} ctx.putImageData(id, 0, 0); save(c, name, "pixel"); }}>بكسل</button></>}>
+      {!img && <Empty />}
+      {img && <canvas ref={ref} className="tl-checker" style={{ ...hide(!!img), maxWidth: "100%", maxHeight: 500 }} />}
+    </ToolShell>
+  );
+}
+export function CircleCropTool() {
+  const { img, name, load } = useImage();
+  const ref = useRef<HTMLCanvasElement>(null);
+  const [d, setD] = useState(400);
+  return (
+    <ToolShell controls={<><Dropzone onFile={load} /><Field label="القطر"><Range label={String(d)} value={d} min={100} max={1000} onChange={setD} unit="px" /></Field><button className="tl-btn full" disabled={!img} onClick={() => { if (!ref.current || !img) return; const c = ref.current; c.width = d; c.height = d; const ctx = c.getContext("2d")!; ctx.beginPath(); ctx.arc(d / 2, d / 2, d / 2, 0, Math.PI * 2); ctx.closePath(); ctx.clip(); const s = Math.min(img.naturalWidth, img.naturalHeight); const sx = (img.naturalWidth - s) / 2, sy = (img.naturalHeight - s) / 2; ctx.drawImage(img, sx, sy, s, s, 0, 0, d, d); save(c, name, "circle"); }}>قص دائري</button></>}>
+      {!img && <Empty />}
+      {img && <canvas ref={ref} className="tl-checker" style={{ ...hide(!!img), maxWidth: "100%", maxHeight: 500 }} />}
+    </ToolShell>
+  );
+}
+export function WatermarkTool() {
+  const { img, name, load } = useImage();
+  const ref = useRef<HTMLCanvasElement>(null);
+  const [text, setText] = useState("Kelvin");
+  return (
+    <ToolShell controls={<><Dropzone onFile={load} /><Field label="النص"><input className="tl-in" style={{ direction: "ltr" }} value={text} onChange={(e) => setText(e.target.value)} /></Field><button className="tl-btn full" disabled={!img} onClick={() => { if (!ref.current || !img) return; const c = ref.current; c.width = img.naturalWidth; c.height = img.naturalHeight; const ctx = c.getContext("2d")!; ctx.drawImage(img, 0, 0); ctx.fillStyle = "rgba(255,255,255,0.5)"; ctx.font = "bold 40px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(text, img.naturalWidth / 2, img.naturalHeight / 2); save(c, name, "watermark"); }}>إضافة علامة مائية</button></>}>
+      {!img && <Empty />}
+      {img && <canvas ref={ref} className="tl-checker" style={{ ...hide(!!img), maxWidth: "100%", maxHeight: 500 }} />}
+    </ToolShell>
+  );
+}
+export function BorderTool() {
+  const { img, name, load } = useImage();
+  const ref = useRef<HTMLCanvasElement>(null);
+  const [color, setColor] = useState("#8b5cf6");
+  return (
+    <ToolShell controls={<><Dropzone onFile={load} /><Field label="لون الإطار"><input className="tl-in" type="color" value={color} onChange={(e) => setColor(e.target.value)} /></Field><button className="tl-btn full" disabled={!img} onClick={() => { if (!ref.current || !img) return; const c = ref.current; c.width = img.naturalWidth; c.height = img.naturalHeight; const ctx = c.getContext("2d")!; ctx.drawImage(img, 0, 0); ctx.lineWidth = 16; ctx.strokeStyle = color; ctx.strokeRect(8, 8, c.width - 16, c.height - 16); save(c, name, "border"); }}>إطار ملون</button></>}>
+      {!img && <Empty />}
+      {img && <canvas ref={ref} className="tl-checker" style={{ ...hide(!!img), maxWidth: "100%", maxHeight: 500 }} />}
+    </ToolShell>
+  );
+}
+export function ShadowTool() {
+  const { img, name, load } = useImage();
+  const ref = useRef<HTMLCanvasElement>(null);
+  return (
+    <ToolShell controls={<><Dropzone onFile={load} /><button className="tl-btn full" disabled={!img} onClick={() => { if (!ref.current || !img) return; const c = ref.current; c.width = img.naturalWidth; c.height = img.naturalHeight; const ctx = c.getContext("2d")!; ctx.shadowColor = "#000"; ctx.shadowBlur = 24; ctx.drawImage(img, 0, 0); ctx.shadowBlur = 0; save(c, name, "shadow"); }}>إضافة ظل</button></>}>
+      {!img && <Empty />}
+      {img && <canvas ref={ref} className="tl-checker" style={{ ...hide(!!img), maxWidth: "100%", maxHeight: 500 }} />}
+    </ToolShell>
+  );
+}
+export function VignetteTool() {
+  const { img, name, load } = useImage();
+  const ref = useRef<HTMLCanvasElement>(null);
+  return (
+    <ToolShell controls={<><Dropzone onFile={load} /><button className="tl-btn full" disabled={!img} onClick={() => { if (!ref.current || !img) return; const c = ref.current; c.width = img.naturalWidth; c.height = img.naturalHeight; const ctx = c.getContext("2d")!; ctx.drawImage(img, 0, 0); const grad = ctx.createRadialGradient(c.width / 2, c.height / 2, c.width / 10, c.width / 2, c.height / 2, Math.max(c.width, c.height)); grad.addColorStop(0, "rgba(0,0,0,0)"); grad.addColorStop(1, "rgba(0,0,0,0.55)"); ctx.fillStyle = grad; ctx.fillRect(0, 0, c.width, c.height); save(c, name, "vignette"); }}>زنيت</button></>}>
+      {!img && <Empty />}
+      {img && <canvas ref={ref} className="tl-checker" style={{ ...hide(!!img), maxWidth: "100%", maxHeight: 500 }} />}
+    </ToolShell>
+  );
+}
