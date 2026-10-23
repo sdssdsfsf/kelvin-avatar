@@ -316,7 +316,7 @@ export function ImageCompressorTool() {
     >
       {!img && <Empty />}
       <canvas ref={ref} className="tl-checker" style={{ ...hide(!!img), maxWidth: "100%", maxHeight: 400 }} />
-      {img && <div style={{marginTop:10}}><p className="tl-note">?????? ???????: {fmtBytes(img ? img.naturalWidth * img.naturalHeight * 4 : 0)}</p></div>}
+      {img && <div style={{marginTop:10}}><p className="tl-note">الحجم: {fmtBytes(img ? img.naturalWidth * img.naturalHeight * 4 : 0)}</p></div>}
     </ToolShell>
   );
 }
@@ -382,23 +382,23 @@ export function PhotoEnhancerTool() {
   const [contrast, setContrast] = useState(100);
   const [saturation, setSaturation] = useState(100);
   const filterOptions = [
-    {v:"none",l:"????"},
-    {v:"sepia",l:"?????"},
-    {v:"grayscale",l:"?????"},
-    {v:"invert",l:"??? ???????"},
-    {v:"blur",l:"?????"}
+    {v:"none",l:"بدون"},
+    {v:"sepia",l:"سيبيا"},
+    {v:"grayscale",l:"تدرج رمادي"},
+    {v:"invert",l:"عكس الألوان"},
+    {v:"blur",l:"طمس"}
   ];
   return (
     <ToolShell
       controls={
         <>
           <Dropzone onFile={load} />
-          <Field label="????? ??????"><Seg value={filter} onChange={setFilter} options={filterOptions}/></Field>
-          <Field label="??????"><Range label={String(brightness)} value={brightness} min={0} max={200} onChange={setBrightness} unit="%"/></Field>
-          <Field label="???????"><Range label={String(contrast)} value={contrast} min={0} max={200} onChange={setContrast} unit="%"/></Field>
-          <Field label="??????"><Range label={String(saturation)} value={saturation} min={0} max={200} onChange={setSaturation} unit="%"/></Field>
+          <Field label="الفلتر"><Seg value={filter} onChange={setFilter} options={filterOptions}/></Field>
+          <Field label="السطوع"><Range label={String(brightness)} value={brightness} min={0} max={200} onChange={setBrightness} unit="%"/></Field>
+          <Field label="التباين"><Range label={String(contrast)} value={contrast} min={0} max={200} onChange={setContrast} unit="%"/></Field>
+          <Field label="التشبع"><Range label={String(saturation)} value={saturation} min={0} max={200} onChange={setSaturation} unit="%"/></Field>
           <div className="tl-flex" style={{gap:10}}>
-            <button className="tl-btn sec" onClick={()=>setBorder(!border)}>{border?"????? ??????":"????? ????"}</button>
+            <button className="tl-btn sec" onClick={()=>setBorder(!border)}>{border?"إلغاء الإطار":"إضافة إطار"}</button>
             <button className="tl-btn full" disabled={!img} onClick={() => {
               if(!ref.current || !img) return;
               const c = ref.current; c.width = img.naturalWidth; c.height = img.naturalHeight;
@@ -407,7 +407,7 @@ export function PhotoEnhancerTool() {
               ctx.drawImage(img, 0, 0);
               if(border){ ctx.lineWidth = 12; ctx.strokeStyle = "#8b5cf6"; ctx.strokeRect(6,6,c.width-12,c.height-12); }
               c.toBlob((b)=>{ if(b){ const u=URL.createObjectURL(b); const a=document.createElement("a"); a.href=u; a.download=`${name}-enhanced.png`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(u); }}, "image/png");
-            }}>????? ?????? ????????</button>
+            }}>تنزيل الصورة المحسّنة</button>
           </div>
         </>
       }
@@ -416,7 +416,7 @@ export function PhotoEnhancerTool() {
       {img && (
         <>
           <canvas ref={ref} className="tl-checker" style={{ ...hide(!!img), maxWidth: "100%", maxHeight: 500 }} />
-          <div style={{marginTop:10}}><p className="tl-note">?????? ???????: {fmtBytes(img ? img.naturalWidth * img.naturalHeight * 4 : 0)}</p></div>
+          <div style={{marginTop:10}}><p className="tl-note">الحجم: {fmtBytes(img ? img.naturalWidth * img.naturalHeight * 4 : 0)}</p></div>
         </>
       )}
     </ToolShell>
