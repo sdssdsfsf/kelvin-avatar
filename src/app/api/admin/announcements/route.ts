@@ -1,0 +1,5 @@
+import {NextResponse} from "next/server";import {prisma} from "@/lib/prisma";import {requireAdmin} from "@/lib/auth";
+export async function GET(){const items=await prisma.announcement.findMany({orderBy:{createdAt:"desc"},take:50});return NextResponse.json(items);}
+export async function POST(req:Request){const admin=await requireAdmin();const {title,body,active,expiresAt}=await req.json();if(!title||!body)return NextResponse.json({error:"بيانات غير مكتملة."},{status:400});const item=await prisma.announcement.create({data:{title,body,active:active!==false,expiresAt:expiresAt?new Date(expiresAt):null}});return NextResponse.json(item);}
+export async function PATCH(req:Request){const admin=await requireAdmin();const {id,...data}=await req.json();if(!id)return NextResponse.json({error:"معرف غير صحيح."},{status:400});const item=await prisma.announcement.update({where:{id},data:{...data,expiresAt:data.expiresAt?new Date(data.expiresAt):null}});return NextResponse.json(item);}
+export async function DELETE(req:Request){const admin=await requireAdmin();const {id}=await req.json();await prisma.announcement.delete({where:{id}});return NextResponse.json({ok:true});}

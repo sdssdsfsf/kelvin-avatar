@@ -1,0 +1,5 @@
+import {NextResponse} from "next/server";import {prisma} from "@/lib/prisma";import {requireAdmin} from "@/lib/auth";
+export async function GET(){const items=await prisma.dailyDrop.findMany({orderBy:{createdAt:"desc"},take:50});return NextResponse.json(items);}
+export async function POST(req:Request){const admin=await requireAdmin();const {title,contentId,imageUrl,active}=await req.json();if(!title)return NextResponse.json({error:"العنوان مطلوب."},{status:400});const item=await prisma.dailyDrop.create({data:{title,contentId:imageUrl?undefined:contentId,imageUrl,active:active!==false}});return NextResponse.json(item);}
+export async function PATCH(req:Request){const admin=await requireAdmin();const {id,...data}=await req.json();if(!id)return NextResponse.json({error:"معرف غير صحيح."},{status:400});const item=await prisma.dailyDrop.update({where:{id},data:{...data,contentId:data.imageUrl?undefined:data.contentId}});return NextResponse.json(item);}
+export async function DELETE(req:Request){const admin=await requireAdmin();const {id}=await req.json();await prisma.dailyDrop.delete({where:{id}});return NextResponse.json({ok:true});}

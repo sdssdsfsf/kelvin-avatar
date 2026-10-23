@@ -1,0 +1,180 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum ContentType {
+  PROFILE
+  WALLPAPER
+}
+
+enum ContentStatus {
+  PENDING
+  PUBLISHED
+  REJECTED
+}
+
+model User {
+  id           String    @id @default(cuid())
+  username     String    @unique
+  passwordHash String
+  role         Role      @default(USER)
+  suspended    Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  content      Content[]
+  reports      Report[]  @relation("Reporter")
+  likes        Like[]    @relation("Liker")
+  searches     SearchLog[]
+  comments     Comment[]
+  collections  Collection[]
+  following    Follow[] @relation("Follower")
+  followers    Follow[] @relation("Following")
+}
+
+model Content {
+  id           String        @id @default(cuid())
+  type         ContentType
+  name         String
+  avatarKey    String?
+  bannerKey    String?
+  imageKey     String?
+  thumbnailUrl String?
+  status       ContentStatus @default(PENDING)
+  featured     Boolean       @default(false)
+  views        Int           @default(0)
+  downloads    Int           @default(0)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  creatorId    String
+  creator      User          @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  reports      Report[]
+  likes        Like[] @relation("Liker")
+  comments     Comment[] @relation("CommentOnContent")
+  collectionItems CollectionItem[] @relation("ItemOnContent")
+
+  @@index([type, status, createdAt])
+  @@index([type, status, views])
+  @@index([type, status, downloads])
+  @@index([creatorId, createdAt])
+}
+
+model Like {
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+  userId     String
+  user       User     @relation("Liker", fields: [userId], references: [id], onDelete: Cascade)
+  contentId  String
+  content    Content  @relation("Liker", fields: [contentId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, contentId])
+  @@index([userId, createdAt])
+}
+
+model Report {
+  id         String   @id @default(cuid())
+  reason     String
+  details    String?
+  status     String   @default("OPEN")
+  createdAt  DateTime @default(now())
+  reporterId String
+  reporter   User     @relation("Reporter", fields: [reporterId], references: [id], onDelete: Cascade)
+  contentId  String
+  content    Content  @relation(fields: [contentId], references: [id], onDelete: Cascade)
+
+  @@index([status, createdAt])
+}
+
+model Announcement {
+  id         String   @id @default(cuid())
+  title      String
+  body       String
+  active     Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  expiresAt  DateTime?
+  @@index([active, createdAt])
+}
+
+model DailyDrop {
+  id         String   @id @default(cuid())
+  title      String
+  contentId  String?
+  imageUrl   String?
+  active     Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  @@index([active, createdAt])
+}
+
+model SearchLog {
+  id        String   @id @default(cuid())
+  query     String
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  createdAt DateTime @default(now())
+  @@index([createdAt])
+}
+
+model Comment {
+  id         String   @id @default(cuid())
+  text       String
+  createdAt  DateTime @default(now())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contentId  String
+  content    Content  @relation("CommentOnContent", fields: [contentId], references: [id], onDelete: Cascade)
+  @@index([contentId, createdAt])
+}
+
+model Collection {
+  id         String   @id @default(cuid())
+  name       String
+  createdAt  DateTime @default(now())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items      CollectionItem[]
+  @@index([userId, createdAt])
+}
+
+model CollectionItem {
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+  collectionId String
+  collection Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  contentId  String
+  content    Content  @relation("ItemOnContent", fields: [contentId], references: [id], onDelete: Cascade)
+  @@unique([collectionId, contentId])
+  @@index([collectionId])
+}
+
+model Follow {
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+  followerId String
+  follower   User     @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+  followingId String
+  following  User     @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
+  @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String?
+  action     String
+  targetType String
+  targetId   String?
+  metadata   Json?
+  createdAt  DateTime @default(now())
+
+  @@index([createdAt])
+}

@@ -1,0 +1,2 @@
+import Link from "next/link";import {AuthForm} from "@/components/AuthForm";
+export default function Register(){return <main className="page container"><div className="page-title" style={{textAlign:"center"}}><h1>أنشئ حسابك</h1><p>اسم مستخدم فريد وكلمة مرور، دون الحاجة إلى بريد إلكتروني.</p></div><AuthForm mode="register"/><p className="muted" style={{textAlign:"center"}}>لديك حساب بالفعل؟ <Link style={{color:"var(--purple)",fontWeight:700}} href="/login">تسجيل الدخول</Link></p></main>}

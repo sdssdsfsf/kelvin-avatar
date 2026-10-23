@@ -1,0 +1,2 @@
+import Link from "next/link";import {AuthForm} from "@/components/AuthForm";
+export default function Login(){return <main className="page container"><div className="page-title" style={{textAlign:"center"}}><h1>مرحباً بعودتك</h1><p>سجّل الدخول لمتابعة مكتبتك ومحتواك.</p></div><AuthForm mode="login"/><p style={{textAlign:"center"}} className="muted">ليس لديك حساب؟ <Link style={{color:"var(--purple)",fontWeight:700}} href="/register">أنشئ حساباً جديداً</Link></p></main>}
