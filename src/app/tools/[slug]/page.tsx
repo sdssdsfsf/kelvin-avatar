@@ -5,9 +5,9 @@ import { getTool, tools } from "@/lib/tools";
 import { toolsCss } from "@/lib/toolsCss";
 import { AvatarCrop, BannerCrop, BgRemover, EmojiColor, EmojiMaker, ImageConverter, RoundedBorder } from "@/components/tools/ImageTools";
 import { ColorConverter, GradientTool, PaletteTool } from "@/components/tools/ColorTools";
-import { FancyText, FormatterTool, TimestampTool, SnowflakeTool, DiscordMentionTool, DiscordInviteTool } from "@/components/tools/TextTools";
+import { FancyText, FormatterTool, TimestampTool, SnowflakeTool } from "@/components/tools/TextTools";
 import { TextCaseTool, PasswordGeneratorTool, BoxShadowTool, BorderRadiusTool, CssButtonTool } from "@/components/tools/ColorTools";
-import { ImageResizerTool, ColorPickerTool, ImageCompressorTool, TextToAsciiTool, DiscordStatusTool, PhotoEnhancerTool, RotateTool, FlipTool, GrayscaleTool, SepiaTool, InvertTool, BlurTool, PixelateTool, CircleCropTool, WatermarkTool, BorderTool, ShadowTool, VignetteTool } from "@/components/tools/ImageTools";
+import { PhotoEnhancerTool, RotateTool, FlipTool, GrayscaleTool, SepiaTool, InvertTool, BlurTool, PixelateTool, CircleCropTool, WatermarkTool, BorderTool, ShadowTool, VignetteTool } from "@/components/tools/ImageTools";
 
 const registry: Record<string, ComponentType> = {
   "emoji-color": EmojiColor,
@@ -24,18 +24,11 @@ const registry: Record<string, ComponentType> = {
   "discord-format": FormatterTool,
   timestamp: TimestampTool,
   snowflake: SnowflakeTool,
-  "discord-mention": DiscordMentionTool,
-  "discord-invite": DiscordInviteTool,
   "text-case": TextCaseTool,
   "password-generator": PasswordGeneratorTool,
   "box-shadow": BoxShadowTool,
   "border-radius": BorderRadiusTool,
   "css-button": CssButtonTool,
-  "image-resizer": ImageResizerTool,
-  "color-picker": ColorPickerTool,
-  "image-compressor": ImageCompressorTool,
-  "text-to-ascii": TextToAsciiTool,
-  "discord-status": DiscordStatusTool,
   "photo-enhancer": PhotoEnhancerTool,
   "image-rotate": RotateTool,
   "image-flip": FlipTool,
